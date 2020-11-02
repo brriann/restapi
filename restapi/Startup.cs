@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using restapi.Filters;
 
 namespace restapi
 {
@@ -28,6 +29,12 @@ namespace restapi
       {
          services.AddControllers();
 
+         services
+            .AddMvc(options =>
+            {
+               options.Filters.Add<JsonExceptionFilter>();
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
          services.AddRouting(options => options.LowercaseUrls = true);
 
          services.AddSwaggerDocument();
