@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using restapi.Filters;
+using restapi.Models;
 
 namespace restapi
 {
@@ -27,6 +29,14 @@ namespace restapi
       // This method gets called by the runtime. Use this method to add services to the container.
       public void ConfigureServices(IServiceCollection services)
       {
+         services.Configure<HotelInfo>(
+            Configuration.GetSection("Info"));
+
+         // use in-memory db for dev+test
+         // TODO: swap out for real db
+         services.AddDbContext<HotelApiDbContext>(
+            options => options.UseInMemoryDatabase("bfostdb"));
+
          services.AddControllers();
 
          services
