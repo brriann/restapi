@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using restapi.Models;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,12 @@ namespace restapi.Services
    public class DefaultRoomService : IRoomService
    {
       private readonly HotelApiDbContext _context;
+      private readonly IMapper _mapper;
 
-      public DefaultRoomService(HotelApiDbContext context)
+      public DefaultRoomService(HotelApiDbContext context, IMapper mapper)
       {
          _context = context;
+         _mapper = mapper;
       }
       public async Task<Room> GetRoomAsync(Guid id)
       {
@@ -24,6 +27,8 @@ namespace restapi.Services
          {
             return null;
          }
+
+         return _mapper.Map<Room>(entity);
 
          return new Room
          {

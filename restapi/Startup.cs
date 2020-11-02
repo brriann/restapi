@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using restapi.Filters;
+using restapi.Infrastructure;
 using restapi.Models;
 using restapi.Services;
 
@@ -72,6 +74,9 @@ namespace restapi
             options.AddPolicy("AllowMyApp",
                policy => policy.WithOrigins("https://myreactapp.example.com")); // policy.AllowAnyOrigin() - for testing. REMOVE IN PROD!
          });
+
+         services.AddAutoMapper(
+            options => options.AddProfile<MappingProfile>());
       }
 
       // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
