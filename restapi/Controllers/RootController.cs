@@ -11,6 +11,7 @@ namespace restapi.Controllers
    public class RootController : ControllerBase
    {
       [HttpGet(Name = nameof(GetRoot))]
+      [ProducesResponseType(200)]
       public IActionResult GetRoot()
       {
          var response = new

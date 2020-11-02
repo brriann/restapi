@@ -28,6 +28,8 @@ namespace restapi
          services.AddControllers();
 
          services.AddRouting(options => options.LowercaseUrls = true);
+
+         services.AddSwaggerDocument();
       }
 
       // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,6 +38,9 @@ namespace restapi
          if (env.IsDevelopment())
          {
             app.UseDeveloperExceptionPage();
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
          }
 
          app.UseHttpsRedirection();
