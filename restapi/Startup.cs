@@ -33,6 +33,7 @@ namespace restapi
             .AddMvc(options =>
             {
                options.Filters.Add<JsonExceptionFilter>();
+               options.Filters.Add<RequireHttpsOrCloseAttribute>();
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
          services.AddRouting(options => options.LowercaseUrls = true);
@@ -48,6 +49,12 @@ namespace restapi
             options.ApiVersionSelector =
                new CurrentImplementationApiVersionSelector(options);
          });
+
+         services.AddCors(options =>
+         {
+            options.AddPolicy("AllowMyApp",
+               policy => policy.WithOrigins("https://myreactapp.example.com")); // policy.AllowAnyOrigin() - for testing. REMOVE IN PROD!
+         });
       }
 
       // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,8 +67,16 @@ namespace restapi
             app.UseOpenApi();
             app.UseSwaggerUi3();
          }
+         else
+         {
+            app.UseHsts();
+         }
 
-         app.UseHttpsRedirection();
+         app.UseCors("AllowMyApp"); // policyName from ConfigureServices()
+
+         // clients connecting to http port get a redirect response pointed to https port (307)
+         // removed due to RequireHttpsOrCloseAttribute Filter
+         //app.UseHttpsRedirection();
 
          app.UseRouting();
 
