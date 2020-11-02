@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using restapi.Filters;
 using restapi.Models;
+using restapi.Services;
 
 namespace restapi
 {
@@ -31,6 +32,12 @@ namespace restapi
       {
          services.Configure<HotelInfo>(
             Configuration.GetSection("Info"));
+
+         // AddScoped = new instance of DefaultRoomService created for every request
+         // vs. Singleton, which is only created once
+         // EF objects like DbContext uses Scoped lifetime
+         // so, every service that interacts with the DbContext needs to be Scoped.
+         services.AddScoped<IRoomService, DefaultRoomService>();
 
          // use in-memory db for dev+test
          // TODO: swap out for real db
